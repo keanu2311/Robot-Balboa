@@ -1,2 +1,3 @@
 # Robot-Balboa
-Return to a base with the Balboa robot
+
+the repository contains, the GERBER , STEP files for the PCB as well as the circuit in PDF format and a 3D format
