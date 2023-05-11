@@ -20,7 +20,7 @@ bool IRsignal4 = false;
 int16_t leftSpeed;
 int16_t rightSpeed;
 
-bool forward;  // conditionnal variable used to obstacle detection
+bool forward;  // conditionnal variable used for obstacle detection
 bool in_function = false; // used to determine if the ultrasonic function has been passed in
 double dist = 0;  // distance = 0 for ultra sonic function
 
@@ -29,15 +29,15 @@ unsigned long delay_forward = 1000;     // max allowed time before code must to 
 unsigned long delay_rotate = 200;       // max allowed time before code must to re read values if signal has  not been detected
 bool detected_IR = false;
 
-#define TRIG_PIN1 21    // pins for ultra sonic sensors
+#define TRIG_PIN1 21    // pins for ultraSonic sensors
 #define ECHO_PIN1 22
 UltraSonicDistanceSensor distanceSensor1(TRIG_PIN1, ECHO_PIN1); //initialize sensor
 
 
 void setup()
 {
-  IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK); // begin receive IR
-  ledYellow(0);
+  IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK); // begin receiving  IR data, with ked indicator to know when a signal has been received
+   ledYellow(0);
   ledRed(1);
   balanceSetup();
   ledRed(0);
@@ -82,10 +82,10 @@ void IR_detectionV2()
 }
 
 void UltraSound_sensor()
-
+// function to calculate the distance to an object
 {   
-                                    //fonctino qui indique le mouvement à faire
-    dist=distanceSensor1.measureDistanceCm();   // récupération des distances des capteurs
+                                    
+    dist=distanceSensor1.measureDistanceCm();   // distance is stored in the variable dist
     
     
     if ((dist>15)) // if distance is supperieur to 15 cm then robot may continue to go forward
@@ -108,13 +108,13 @@ void loop()
  
   balanceUpdate();
 
-  
-  if (in_function == false)
+ 
+  if (in_function == false) // first time in the code will start checking for obstacles as in function is declared as false
     {
      UltraSound_sensor();
     } 
 
-  if ((IRsignal1 || IRsignal2 || IRsignal3 || IRsignal4) == false)
+  if ((IRsignal1 || IRsignal2 || IRsignal3 || IRsignal4) == false) // first time in the code will start checking for IR data as IR signals have been set to false at the start
     {
       IR_detectionV2();
     }
@@ -127,13 +127,13 @@ void loop()
         balanceDrive(leftSpeed, rightSpeed);  // pass in leftSpeed and rightSpeed in the function to go forward   
         if ((millis()-count_millis) > delay_forward) // if the elasped time since the start of the code and the time we stayed in the ultrasonics function is greater then 1000ms then we reread a value
           { 
-            in_function = false;      
-            IR_detectionV2();
+            in_function = false; // reset to false to check for obstalces once the loop function restarts      
+            IR_detectionV2(); 
           }
         if (forward == false) // if we detected an obstacle, the robot must stop. 
         {
-          leftSpeed = false;                               
-          rightSpeed = false;
+          leftSpeed = 0;                               
+          rightSpeed = 0;
           balanceDrive(leftSpeed, rightSpeed);
      
         }
@@ -146,7 +146,7 @@ void loop()
         balanceDrive(leftSpeed, rightSpeed);
         if ((millis()-count_millis)>delay_rotate)
           {
-            in_function=0;
+            in_function = false;
             IR_detectionV2();
           }
       }
