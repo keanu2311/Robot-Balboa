@@ -24,23 +24,21 @@ void setup() {
 }
 
 uint8_t sCommand;
-uint8_t sRepeats = 4;
+uint8_t sRepeats = 4; // number of time to repeat the signal 
 
 void loop() {
-    /
-   
-    // Receiver output for the first loop must be: Protocol=NEC Address=0x102 Command=0x34 Raw-Data=0xCB340102 (32 bits)
+    
     digitalWrite(base1,1);  // activate first base to send signal to LED1 , all other leds are deactivated
-    digitalWrite(base2,0); 
+    digitalWrite(base2,0);  // keep all the other transistor deactivated
     digitalWrite(base3,0);
     digitalWrite(base4,0);
-    sCommand = 0x34;
+    sCommand = 0x34; // first command to send
     IrSender.sendNEC(0x04, sCommand, sRepeats); 
     // send IR data with NEC protocol, OX04 is the adress, scommand is the command ( max of 8 bits) , srepeats is the number of time that the signal will repeat itsel
     //aka the number of time it will be sent
     digitalWrite(base1,0);
     
-    delay(10); // delay between each signal is neccesary to ensure that no signal is modified by another one. a minium of 5 ms is needed
+    delay(10); // delay between each signal is neccesary to ensure that no signal is not modified by another one. a minimum of 5 ms is needed
     sCommand = 0x77;
     digitalWrite(base2,1);
     IrSender.sendNEC(0x07, sCommand, sRepeats);
