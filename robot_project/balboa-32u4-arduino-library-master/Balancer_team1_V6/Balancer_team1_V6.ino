@@ -88,7 +88,7 @@ void UltraSound_sensor()
     dist=distanceSensor1.measureDistanceCm();   // distance is stored in the variable dist
     
     
-    if ((dist>15)) // if distance is supperieur to 15 cm then robot may continue to go forward
+    if ((dist>15)) // if distance is supperior to 15 cm then robot may continue to go forward
     {              
       forward = true;
       
